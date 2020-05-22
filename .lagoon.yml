@@ -33,3 +33,15 @@ tasks:
         command: drush -y cr
         service: cli
 
+environments:
+  master:
+    routes:
+      - nginx:
+        - k8s-example.amazee.io:
+            annotations:
+              nginx.ingress.kubernetes.io/server-snippet: |
+                rewrite ^/redirect-test(.*) https://www.amazee.io/redirect-test$1 permanent;    
+        - www.k8s-example.amazee.io:
+            annotations:
+              nginx.ingress.kubernetes.io/permanent-redirect: https://k8s-example.amazee.io$request_uri
+
